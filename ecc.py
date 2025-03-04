@@ -31,10 +31,19 @@ class FieldElement:
         return self.__class__(num, self.prime)
 
     def __mul__(self, other):
-        if self.prime != other.prime:
-            raise TypeError("Cannot multiply two numbers in different Fields")
-        num = (self.num * other.num) % self.prime
-        return self.__class__(num, self.prime)
+        if isinstance(other, FieldElement):
+            if self.prime != other.prime:
+                raise TypeError("Cannot multiply two numbers in different Fields")
+            num = (self.num * other.num) % self.prime
+            return self.__class__(num, self.prime)
+        elif isinstance(other, int):
+            num = (self.num * other) % self.prime
+            return self.__class__(num, self.prime)
+        else:
+            raise TypeError(f"Cannot multiply FieldElement with {type(other)}")
+    
+    def __rmul__(self, coefficient):
+        return self.__mul__(coefficient)
 
     # Leverage Fermat's Little Theorem to reduce the number of operations
     # the exponent could be negative
@@ -69,6 +78,8 @@ class ECPoint:
             raise ValueError(f"({x}, {y}) is not on the curve")
     
     def __repr__(self):
+        if self.x is None or self.y is None:
+            return "ECPoint(infinity)"
         return f"ECPoint({self.x}, {self.y}) on y^2 = x^3 + {self.a}x + {self.b}"
     
     def __eq__(self, other):
@@ -106,6 +117,22 @@ class ECPoint:
                 x = s ** 2 - 2 * self.x
                 y = s * (self.x - x) - self.y
                 return self.__class__(x, y, self.a, self.b)
+    
+    def __mul__(self, coefficient):
+        # apply binary expansion 
+        coef = coefficient 
+        current = self 
+        result = self.__class__(None, None, self.a, self.b)
+        while coef:
+            if coef & 1:
+                result += current 
+            current += current 
+            coef >>= 1 
+        return result
+
+    def __rmul__(self, coefficient):
+        return self.__mul__(coefficient)
+
             
 
 
