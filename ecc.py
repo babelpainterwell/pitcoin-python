@@ -133,6 +133,22 @@ class ECPoint:
     def __rmul__(self, coefficient):
         return self.__mul__(coefficient)
 
+
+    def get_group_order(self):
+        # we can generate a finite cyclic group by taking a generator point from an elliptic curve over a finite field
+        # Time Complexity: O(n) -> provides security against brute force attacks for private keys 
+        if not isinstance(self.x, FieldElement) or not isinstance(self.y, FieldElement) or not isinstance(self.a, FieldElement) or not isinstance(self.b, FieldElement):
+            raise ValueError("Cannot calculate group order for non-field elements")
+        order = 1
+        current = self 
+        ZERO = ECPoint(None, None, self.a, self.b)
+        # reaches the point at infinity
+        while current != ZERO:
+            order += 1
+            current += self
+        return order
+
+
             
 
 
