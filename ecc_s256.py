@@ -29,3 +29,11 @@ class S256Point(ECPoint):
         if self.x is None and self.y is None:
             return 'S256Point(infinity)'
         return 'S256Point({}, {})'.format(self.x, self.y)
+
+    # since we know the order of the group, we mod by the order
+    def __mul__(self, coefficient):
+        coef = coefficient % N
+        return super().__mul__(coef)
+    
+    def __rmul__(self, coefficient):
+        return self * coefficient
