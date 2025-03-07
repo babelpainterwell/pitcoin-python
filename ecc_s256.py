@@ -4,7 +4,7 @@ from ecc import FieldElement, ECPoint
 PRIME = 2**256 - 2**32 - 977
 A = 0
 B = 7
-N = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
+
 
 
 class S256Field(FieldElement):
@@ -20,15 +20,14 @@ class S256Point(ECPoint):
         a, b = S256Field(A), S256Field(B)
         if type(x) == int:
             super().__init__(S256Field(x), S256Field(y), a, b)
-        elif type(x) == S256Field:
-            super().__init__(x, y, a, b)
+        # if x is None, then this represents the point at infinity (edge case)
         else:
-            raise TypeError(f"Unrecognized type {type(x)}")
+            super().__init__(x, y, a, b)
     
     def __repr__(self):
         if self.x is None and self.y is None:
             return 'S256Point(infinity)'
-        return 'S256Point({}, {})'.format(self.x, self.y)
+        return 'S256Point({}, {}, {}, {})'.format(self.x, self.y, self.a, self.b)
 
     # since we know the order of the group, we mod by the order
     def __mul__(self, coefficient):
@@ -37,3 +36,8 @@ class S256Point(ECPoint):
     
     def __rmul__(self, coefficient):
         return self * coefficient
+
+
+N = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
+G = S256Point(0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798,
+            0x483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8)
