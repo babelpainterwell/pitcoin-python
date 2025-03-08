@@ -1,5 +1,6 @@
 from unittest import TestCase
 from ecc import FieldElement, ECPoint
+from ecc_s256 import N, G, S256Point
 
 class ECCTest(TestCase):
 
@@ -41,4 +42,13 @@ class ECCTest(TestCase):
         p2 = ECPoint(FieldElement(76, prime), FieldElement(66, prime), a, b)
         p3 = ECPoint(FieldElement(47, prime), FieldElement(71, prime), a, b)
         self.assertEqual(p1 + p2, p3)
+    
+
+class S256Test(TestCase):
+
+    def test_order(self):
+        point = G
+        # order of G is N, G*N should be S256Point(infinity)
+        self.assertEqual(N * point, S256Point(None, None))
+        
 
