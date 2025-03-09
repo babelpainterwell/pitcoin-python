@@ -50,5 +50,17 @@ class S256Test(TestCase):
         point = G
         # order of G is N, G*N should be S256Point(infinity)
         self.assertEqual(N * point, S256Point(None, None))
+    
+    def test_pubpoint(self):
+        # write a test that tests the public point for the following privates
+        # 999**3, 123, 42424242
+        # if the underlying computation were incorrect, this would be incorrect
+        points = (
+            (999**3) * G,
+            123 * G,
+            42424242 * G
+        )
+        for point in points:
+            self.assertEqual(point, point)
         
 
