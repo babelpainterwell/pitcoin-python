@@ -48,7 +48,7 @@ class ECCTest(TestCase):
         a = FieldElement(0, prime)
         b = FieldElement(7, prime)
 
-        
+
 
         
 
@@ -72,4 +72,5 @@ class S256Test(TestCase):
         )
         for point in points:
             self.assertEqual(point, point)
+    
     
