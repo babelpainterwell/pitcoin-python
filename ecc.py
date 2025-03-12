@@ -136,6 +136,9 @@ class ECPoint:
     def __neg__(self):
         return self.__class__(self.x, -self.y, self.a, self.b)
 
+    def __sub__(self, other):
+        return self + -other
+
 
     def get_group_order(self):
         # we can generate a finite cyclic group by taking a generator point from an elliptic curve over a finite field
