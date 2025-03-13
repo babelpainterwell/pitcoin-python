@@ -25,7 +25,7 @@ class S256Point(ECPoint):
             super().__init__(x, y, a, b)
     
     def __repr__(self):
-        if self.x is None and self.y is None:
+        if self.x is None or self.y is None:
             return 'S256Point(infinity)'
         return 'S256Point({}, {}, {}, {})'.format(self.x, self.y, self.a, self.b)
 
@@ -36,6 +36,7 @@ class S256Point(ECPoint):
     
     def __rmul__(self, coefficient):
         return self * coefficient
+    
 
 
 N = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
